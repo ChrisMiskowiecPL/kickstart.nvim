@@ -91,7 +91,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.opt.guifont = 'FiraCode Nerd Font Mono'
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -170,6 +171,9 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+--
+-- Neo Tree
+vim.keymap.set('n', '<leader>wf', '<cmd>Neotree<CR>', { desc = 'Open [w]indow with [f]ile tree' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -664,7 +668,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -971,6 +975,32 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v3.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+      'MunifTanjim/nui.nvim',
+      -- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+    lazy = false, -- neo-tree will lazily load itself
+    ---@module "neo-tree"
+    ---@type neotree.Config?
+    opts = {
+      -- fill any relevant options here
+      source_selector = {
+        truncation_character = '...',
+        winbar = true,
+      },
+      filesystem = {
+        bind_to_cwd = true,
+        cwd_target = {
+          sidebar = 'window',
+        },
+      },
+    },
+  },
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -1006,3 +1036,21 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+vim.opt.shell = 'pwsh.exe'
+
+vim.opt.mouse = 'a'
+
+local channel_id = 0
+vim.keymap.set('n', '<leader>wt', function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd 'J'
+  vim.api.nvim_win_set_height(0, 12)
+
+  channel_id = vim.bo.channel
+end)
+
+vim.keymap.set('n', '<leader>example', function()
+  vim.fn.chansend(channel_id, 'ls\r\n')
+end)
