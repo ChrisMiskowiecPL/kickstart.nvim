@@ -403,11 +403,14 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          path_display = {
+            'filename_first',
+          },
+          --   mappings = {
+          --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          --   },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -458,6 +461,45 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'klen/nvim-config-local',
+    config = function()
+      require('config-local').setup {
+        config_files = { '.nvim.lua' },
+        hashfile = vim.fn.stdpath 'data' .. '/config-local',
+      }
+    end,
+  },
+
+  {
+    'rcarriga/nvim-dap-ui',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'nvim-neotest/nvim-nio',
+    },
+    config = function()
+      -- local dap = require('dap')
+      -- local dapui = require('dapui')
+      -- dapui.setup()
+
+      -- dap.adapters.coreclr = {
+      -- type = 'executable',
+      -- command = '',
+      -- args = {},
+      -- }
+      --
+      -- dap.configurations.cs = {
+      -- -- {
+      -- type == "coreclr",
+      -- request = "launch",
+      -- name = "Launch .NET Core App",
+      -- }
+      -- }
+    end,
+  },
+
+  { 'theHamsta/nvim-dap-virtual-text' },
+
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -468,6 +510,7 @@ require('lazy').setup({
       library = {
         -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        { 'nvim-dap-ui' },
       },
     },
   },
@@ -545,15 +588,18 @@ require('lazy').setup({
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
           map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          map('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
           map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
@@ -679,6 +725,12 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+        omnisharp = {
+          cmd = { 'dotnet', vim.fn.stdpath 'data' .. '/mason/packages/omnisharp/libexec/OmniSharp.dll' },
+          root_dir = function()
+            return vim.loop.cwd()
+          end,
+        },
 
         lua_ls = {
           -- cmd = { ... },
@@ -998,6 +1050,9 @@ require('lazy').setup({
         cwd_target = {
           sidebar = 'window',
         },
+        filtered_items = {
+          visible = true,
+        },
       },
     },
   },
@@ -1040,6 +1095,8 @@ require('lazy').setup({
 vim.opt.shell = 'pwsh.exe'
 
 vim.opt.mouse = 'a'
+
+vim.wo.wrap = false
 
 local channel_id = 0
 vim.keymap.set('n', '<leader>wt', function()
