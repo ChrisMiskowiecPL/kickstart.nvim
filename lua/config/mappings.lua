@@ -30,3 +30,13 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+
+-- Debugging
+
+vim.keymap.set('n', '<F5>', '<cmd>lua require("dap").continue()<CR>')
+vim.keymap.set('n', '<F10>', '<cmd>lua require("dap").step_over()<CR>')
+vim.keymap.set('n', '<F11>', '<cmd>lua require("dap").step_into()<CR>')
+vim.keymap.set('n', '<F12>', '<cmd>lua require("dap").step_out()<CR>')
+vim.keymap.set('n', '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<CR>', { desc = 'Toggle [b]reakpoint' })
+vim.keymap.set('n', '<leader>dr', '<cmd>lua require("dap").repl.open()<CR>', { desc = 'Open [r]epl' })
+
