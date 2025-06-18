@@ -30,3 +30,5 @@ vim.keymap.set('n', '<F11>', '<cmd>lua require("dap").step_into()<CR>')
 vim.keymap.set('n', '<F12>', '<cmd>lua require("dap").step_out()<CR>')
 vim.keymap.set('n', '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<CR>', { desc = 'Toggle [b]reakpoint' })
 vim.keymap.set('n', '<leader>dr', '<cmd>lua require("dap").repl.open()<CR>', { desc = 'Open [r]epl' })
+
+vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, { desc = 'Code [a]ction' })

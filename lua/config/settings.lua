@@ -70,6 +70,6 @@ vim.opt.scrolloff = 10
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
-vim.opt.shell = 'pwsh.exe'
+-- vim.opt.shell = 'pwsh.exe'
 
 vim.wo.wrap = false
